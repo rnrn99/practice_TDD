@@ -1,0 +1,20 @@
+{
+  "name": "practice_tdd",
+  "version": "1.0.0",
+  "description": "practice tdd with node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rnrn99",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.5"
+  },
+  "devDependencies": {
+    "jest": "^27.1.0",
+    "node-mocks-http": "^1.10.1",
+    "supertest": "^6.1.6"
+  }
+}
