@@ -1,9 +1,28 @@
-describe("calculation", () => {
-  test("2+2=4", () => {
-    expect(2 + 2).toBe(4);
+const httpMocks = require("node-mocks-http");
+const productController = require("../../controller/product");
+const productModel = require("../../model/Product");
+const newProduct = require("../data/newProduct.json");
+
+productModel.create = jest.fn();
+
+let req, res, next;
+
+beforeEach(() => {
+  req = httpMocks.createRequest();
+  res = httpMocks.createResponse();
+  next = null;
+});
+
+describe("Product Controller Create", () => {
+  beforeEach(() => {
+    req.body = newProduct;
+  });
+  test("should have a createProduct function", () => {
+    expect(typeof productController.createProduct).toBe("function");
   });
 
-  test("2+2 != 5", () => {
-    expect(2 + 2).not.toBe(5);
+  test("should call Product.create", () => {
+    productController.createProduct(req, res, next);
+    expect(productModel.create).toBeCalledWith(newProduct);
   });
 });
