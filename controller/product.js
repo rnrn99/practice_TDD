@@ -1,10 +1,11 @@
 const productModel = require("../model/Product");
 
-exports.hello = (req, res) => {
-  res.send("안녕하세요");
-};
-
-exports.createProduct = (req, res, next) => {
-  const createdProduct = productModel.create(req.body);
-  res.status(201).json(createdProduct);
+exports.createProduct = async (req, res, next) => {
+  try {
+    const createdProduct = await productModel.create(req.body);
+    console.log("createProduct: ", createdProduct);
+    res.status(201).json(createdProduct);
+  } catch (error) {
+    next(error);
+  }
 };
