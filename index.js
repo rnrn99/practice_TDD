@@ -18,12 +18,8 @@ app.use(express.json());
 
 app.use("/api/product", productRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.use((error, req, res, next) => {
+  res.status(500).json({ message: error.message });
 });
 
 module.exports = app;
