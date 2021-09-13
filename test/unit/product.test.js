@@ -2,6 +2,7 @@ const httpMocks = require("node-mocks-http");
 const productController = require("../../controller/product");
 const productModel = require("../../model/Product");
 const newProduct = require("../data/newProduct.json");
+const allProduct = require("../data/allProduct.json");
 
 productModel.create = jest.fn();
 productModel.find = jest.fn();
@@ -63,5 +64,11 @@ describe("Product Controller Get", () => {
     await productController.getProduct(req, res, next);
     expect(res.statusCode).toBe(200);
     expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  test("should return json body in response", async () => {
+    productModel.find.mockReturnValue(allProduct);
+    await productController.getProduct(req, res, next);
+    expect(res._getJSONData()).toStrictEqual(allProduct);
   });
 });

@@ -1,0 +1,17 @@
+[
+  {
+    "name": "banana",
+    "description": "yellow fruit",
+    "price": 3.99
+  },
+  {
+    "name": "apple",
+    "description": "red fruit",
+    "price": 8.99
+  },
+  {
+    "name": "grape",
+    "description": "purple fruit",
+    "price": 12
+  }
+]
