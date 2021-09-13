@@ -9,3 +9,5 @@ exports.createProduct = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getProduct = async (req, res, next) => {};
