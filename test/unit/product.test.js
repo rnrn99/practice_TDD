@@ -4,6 +4,7 @@ const productModel = require("../../model/Product");
 const newProduct = require("../data/newProduct.json");
 
 productModel.create = jest.fn();
+productModel.find = jest.fn();
 
 let req, res, next;
 
@@ -51,5 +52,10 @@ describe("Product Controller Create", () => {
 describe("Product Controller Get", () => {
   test("should have a getProduct function", () => {
     expect(typeof productController.getProduct).toBe("function");
+  });
+
+  test("should call productModel.find({})", async () => {
+    await productController.getProduct(req, res, next);
+    expect(productModel.find).toHaveBeenCalledWith({});
   });
 });
