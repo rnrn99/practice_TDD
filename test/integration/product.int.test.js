@@ -4,6 +4,11 @@ const newProduct = require("../data/newProduct.json");
 
 let firstProduct;
 
+const updatedProduct = {
+  name: "updated name",
+  description: "updated description",
+};
+
 test("POST /api/product", async () => {
   const response = await request(app).post("/api/product").send(newProduct);
   expect(response.statusCode).toBe(201);
@@ -40,6 +45,24 @@ test("GET /api/product/:productId", async () => {
 });
 
 test("should return 404 on GET /api/product/:productId", async () => {
-  const response = await request(app).get("api/product/613efebe4e6ce199056d77");
+  const response = await request(app).get(
+    "/api/product/613efe856dd313368f2bb9c5",
+  );
+  expect(response.statusCode).toBe(404);
+});
+
+test("PUT /api/product/:productId", async () => {
+  const response = await request(app)
+    .put(`/api/product/${firstProduct._id}`)
+    .send(updatedProduct);
+  expect(response.statusCode).toBe(200);
+  expect(response.body.name).toBe(updatedProduct.name);
+  expect(response.body.description).toBe(updatedProduct.description);
+});
+
+test("should return 404 on PUT /api/product/:productId", async () => {
+  const response = await request(app)
+    .put("/api/product/613efe856dd313368f2bb9c4")
+    .send(updatedProduct);
   expect(response.statusCode).toBe(404);
 });
