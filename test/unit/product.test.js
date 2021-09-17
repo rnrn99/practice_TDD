@@ -8,6 +8,7 @@ productModel.create = jest.fn();
 productModel.find = jest.fn();
 productModel.findById = jest.fn();
 productModel.findByIdAndUpdate = jest.fn();
+productModel.findByIdAndDelete = jest.fn();
 
 let req, res, next;
 const productId = "613efebe4e6ce199056d5453";
@@ -161,6 +162,45 @@ describe("Product Controller Update", () => {
     const rejectedPromise = Promise.reject(errorMsg);
     productModel.findByIdAndUpdate.mockReturnValue(rejectedPromise);
     await productController.updateProduct(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorMsg);
+  });
+});
+
+describe("Product Controller Delete", () => {
+  test("should have a deleteProduct function", () => {
+    expect(typeof productController.deleteProduct).toBe("function");
+  });
+
+  test("should call productModel.findByIdAndDelete", async () => {
+    req.params.productId = productId;
+    await productController.deleteProduct(req, res, next);
+    expect(productModel.findByIdAndDelete).toBeCalledWith(productId);
+  });
+
+  test("should return deleted data and response code 200", async () => {
+    let deletedProduct = {
+      name: "deleted name",
+      description: "it is deleted",
+    };
+    productModel.findByIdAndDelete.mockReturnValue(deletedProduct);
+    await productController.deleteProduct(req, res, next);
+    expect(res.statusCode).toBe(200);
+    expect(res._getJSONData()).toStrictEqual(deletedProduct);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  test("should return 404 when item doesn't exist", async () => {
+    productModel.findByIdAndDelete.mockReturnValue(null);
+    await productController.deleteProduct(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  test("should handle error", async () => {
+    const errorMsg = { message: "Failed to delete product" };
+    const rejectedPromise = Promise.reject(errorMsg);
+    productModel.findByIdAndDelete.mockReturnValue(rejectedPromise);
+    await productController.deleteProduct(req, res, next);
     expect(next).toHaveBeenCalledWith(errorMsg);
   });
 });
