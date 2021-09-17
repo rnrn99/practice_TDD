@@ -93,4 +93,27 @@ describe("Product Controller GetById", () => {
     await productController.getProductById(req, res, next);
     expect(productModel.findById).toBeCalledWith(productId);
   });
+
+  test("should return json body and response code 200", async () => {
+    productModel.findById.mockReturnValue(newProduct);
+    await productController.getProductById(req, res, next);
+    expect(res.statusCode).toBe(200);
+    expect(res._getJSONData()).toStrictEqual(newProduct);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  test("should return 404 when item doesn't exist", async () => {
+    productModel.findById.mockReturnValue(null);
+    await productController.getProductById(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  test("should handle error", async () => {
+    const errorMsg = { message: "Failed to get product by Id" };
+    const rejectedPromise = Promise.reject(errorMsg);
+    productModel.findById.mockReturnValue(rejectedPromise);
+    await productController.getProductById(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorMsg);
+  });
 });
